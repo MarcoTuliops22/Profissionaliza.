@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="Templates Prontos para Sites, Currículos e Planilhas. Rápidos, práticos e direto ao ponto.">
-    <title>Profissionaliza | Templates Prontos</title>
+        content="Serviços de TI profissionais: formatação de computadores, redes, cibersegurança, dashboards com IA e suporte técnico. Atendimento online e presencial.">
+    <title>Profissionaliza | Serviços de TI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -15,259 +15,616 @@
 
 <body>
 
-    <!-- Top Navbar / Brand -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="#home" class="logo">
                 <h2>Profissionaliza<span class="text-gradient">.</span></h2>
-            </div>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#especialidades">Especialidades</a></li>
+                <li><a href="#como-funciona">Como Funciona</a></li>
+                <li><a href="#depoimentos">Depoimentos</a></li>
+                <li><a href="#orcamento" class="btn btn-primary btn-nav">Solicitar Orçamento</a></li>
+            </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <header class="hero" id="home">
         <div class="hero-overlay"></div>
         <div class="container hero-content reveal">
-            <span class="badge">🚀 Simples, rápido e barato</span>
-            <h1>Baixe Templates Prontos e <span class="text-gradient">Economize Tempo</span></h1>
-            <p>Crie seu site, currículo ou controle financeiro em minutos — sem precisar saber programar. Só mandar uma
-                mensagem e pronto!</p>
+            <span class="badge">🛠️ Suporte Técnico de Excelência</span>
+            <h1>Soluções em TI que <span class="text-gradient">Funcionam de Verdade</span></h1>
+            <p>Formatação, redes, cibersegurança e dashboards com IA — atendimento rápido, online ou presencial, com
+                profissionais qualificados.</p>
+
+            <div class="hero-actions">
+                <a href="#servicos" class="btn btn-primary btn-glow">Ver Serviços</a>
+                <a href="https://wa.me/5563999145241?text=Ol%C3%A1%2C%20preciso%20de%20um%20servi%C3%A7o%20de%20TI."
+                    target="_blank" class="btn btn-outline">Falar no WhatsApp</a>
+            </div>
+
             <div class="hero-design-element">
                 <div class="mouse-scroll">
                     <div class="wheel"></div>
                 </div>
-                <span class="scroll-text">Explore os modelos abaixo</span>
+                <span class="scroll-text">Conheça nossos serviços</span>
             </div>
 
             <div class="features-row">
-                <div class="feature-item">✔ Pronto o <br> <span class="highlight">mais rápido possivel.</span></div>
-                <div class="feature-item">✔ Imagem / <br> <span class="highlight">Design Top</span></div>
-                <div class="feature-item">✔ Resposta <br> <span class="highlight">Imediata</span></div>
+                <div class="feature-item">✔ Atendimento <br> <span class="highlight">Online e Presencial</span></div>
+                <div class="feature-item">✔ Resposta <br> <span class="highlight">Rápida e Eficiente</span></div>
+                <div class="feature-item">✔ Garantia de <br> <span class="highlight">Qualidade</span></div>
             </div>
         </div>
     </header>
 
-    <!-- Benefícios -->
-    <section class="benefits container" id="beneficios">
-        <div class="grid benefits-grid">
-            <div class="card glass-card reveal">
-                <div class="icon">⚡</div>
-                <h3>Rápido e Prático</h3>
-                <p>Pronto para usar em menos de 5 minutos. Não precisa instalar nada complicado.</p>
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item reveal">
+                <span class="stat-num">9+</span>
+                <span class="stat-label">Serviços mais solicitados</span>
             </div>
-            <div class="card glass-card reveal">
-                <div class="icon">📱</div>
-                <h3>Responsivo</h3>
-                <p>Funciona perfeitamente no celular e no computador.</p>
+            <div class="stat-item reveal">
+                <span class="stat-num">16</span>
+                <span class="stat-label">Especialidades em TI</span>
             </div>
-            <div class="card glass-card reveal">
-                <div class="icon">🎯</div>
-                <h3>Para Todos</h3>
-                <p>Ideal para iniciantes e profissionais experientes que valorizam o tempo.</p>
+            <div class="stat-item reveal">
+                <span class="stat-num">100%</span>
+                <span class="stat-label">Foco em resultados</span>
             </div>
         </div>
     </section>
 
-    <!-- Produtos Section -->
-    <section class="products container" id="produtos">
+    <section class="products container" id="servicos">
         <div class="section-title reveal">
-            <span class="badge">🔥 Ofertas Especiais</span>
-            <h2>Produtos Mais <span class="text-gradient">Vendidos</span></h2>
+            <span class="badge">🔥 Mais Solicitados</span>
+            <h2>Serviços de TI em <span class="text-gradient">Alta Demanda</span></h2>
+            <p>Os serviços que nossos clientes mais procuram — soluções práticas, com preço justo e entrega profissional.</p>
         </div>
 
         <div class="grid products-grid">
-            <!-- Produto 1 -->
-            <div class="product-card glass-card reveal">
-                <div class="product-img">
-                    <img src="assets/resume_mockup.png" alt="Currículo Profissional" loading="lazy">
-                </div>
-                <div class="product-info">
-                    <h3>📄 Currículo Profissional</h3>
-                    <p class="platform-badge">Via Canva</p>
-                    <p>Deixe seu currículo bonito e organizado em minutos e consiga mais entrevistas.</p>
-                    <div class="price-action">
-                        <span class="price">R$ 19,90</span>
-                        <a href="#" class="btn btn-primary">COMPRAR</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produto 2 -->
-            <div class="product-card glass-card active reveal">
+            <article class="product-card glass-card active reveal" data-service="formatacao">
                 <div class="ribbon">Mais Popular</div>
                 <div class="product-img">
-                    <img src="assets/site_mockup.png" alt="Site para Negócio Local" loading="lazy">
+                    <img src="assets/service_formatacao_so.png" alt="Formatação e Instalação de Sistemas Operacionais" loading="lazy">
                 </div>
                 <div class="product-info">
-                    <h3>🌐 Site Negócio Local</h3>
-                    <p class="platform-badge">HTML/CSS</p>
-                    <p>Template pronto para lojas, delivery ou prestadores de serviços.</p>
+                    <h3>💿 Formatação e Instalação de SO</h3>
+                    <p class="platform-badge">Windows / Linux / macOS</p>
+                    <p>Computador lento ou com vírus? Formatação completa com backup de arquivos, instalação de drivers e programas essenciais.</p>
+                    <ul class="service-features">
+                        <li>Backup completo de dados</li>
+                        <li>Otimização de desempenho</li>
+                        <li>Instalação de softwares</li>
+                    </ul>
                     <div class="price-action">
-                        <span class="price">R$ 199,90</span>
-                        <a href="#" class="btn btn-primary btn-glow">COMPRAR</a>
+                        <span class="price">R$ 100,00</span>
+                        <button type="button" class="btn btn-primary btn-glow btn-service" data-name="Formatação e Instalação de SO" data-price="R$ 100,00">CONTRATAR</button>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- Produto 3 -->
-            <div class="product-card glass-card reveal">
+            <article class="product-card glass-card reveal" data-service="dashboard">
                 <div class="product-img">
-                    <img src="assets/spreadsheet_mockup.png" alt="Controle Financeiro" loading="lazy">
+                    <img src="assets/service_dashboard_ia.png" alt="Dashboard e Inteligência Artificial" loading="lazy">
                 </div>
                 <div class="product-info">
-                    <h3>📊 Controle Financeiro</h3>
-                    <p class="platform-badge">Excel / Sheets</p>
-                    <p>Controle seus gastos de forma simples, visual e direta ao ponto.</p>
+                    <h3>🧠 Dashboard & Inteligência Artificial</h3>
+                    <p class="platform-badge">Power BI / Excel / Sheets</p>
+                    <p>Painéis interativos conectados à IA para visualizar indicadores, tomar decisões e automatizar relatórios do seu negócio.</p>
+                    <ul class="service-features">
+                        <li>Integração com Gemini/ChatGPT</li>
+                        <li>Gráficos dinâmicos em tempo real</li>
+                        <li>Relatórios automatizados</li>
+                    </ul>
                     <div class="price-action">
-                        <span class="price">R$ 129,90</span>
-                        <a href="#" class="btn btn-primary">COMPRAR</a>
+                        <span class="price">R$ 120,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Dashboard & Inteligência Artificial" data-price="R$ 109,90">CONTRATAR</button>
                     </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="redes">
+                <div class="product-img">
+                    <img src="assets/service_redes_ciberseguranca.png" alt="Redes e Cibersegurança" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>🔒 Redes & Cibersegurança</h3>
+                    <p class="platform-badge">Configuração + Proteção</p>
+                    <p>Configure sua rede de forma segura, proteja dados contra invasores e garanta conexão estável em casa ou no escritório.</p>
+                    <ul class="service-features">
+                        <li>Configuração de roteadores</li>
+                        <li>Proteção contra ameaças</li>
+                        <li>Guia prático personalizado</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 90,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Redes & Cibersegurança" data-price="R$ 89,90">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="montagem">
+                <div class="product-img">
+                    <img src="assets/testimonial_format_pc.png" alt="Montagem e Manutenção de Microcomputadores" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>🖥️ Montagem e Manutenção de PC</h3>
+                    <p class="platform-badge">Hardware / Upgrades</p>
+                    <p>Montagem profissional de computadores, troca de peças, limpeza interna e upgrade de memória, SSD e placa de vídeo.</p>
+                    <ul class="service-features">
+                        <li>Montagem sob medida</li>
+                        <li>Upgrade de performance</li>
+                        <li>Diagnóstico completo</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 150,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Montagem e Manutenção de PC" data-price="R$ 150,00">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="roteadores">
+                <div class="product-img">
+                    <img src="assets/security_networks_mockup.png" alt="Configuração de Redes e Roteadores" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>🌐 Configuração de Redes e Roteadores</h3>
+                    <p class="platform-badge">Wi-Fi / Cabeada</p>
+                    <p>Rede lenta ou instável? Configuramos roteadores, repetidores e redes empresariais para máxima velocidade e cobertura.</p>
+                    <ul class="service-features">
+                        <li>Otimização de sinal Wi-Fi</li>
+                        <li>Configuração de VLANs</li>
+                        <li>Suporte pós-instalação</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 80,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Configuração de Redes e Roteadores" data-price="R$ 79,90">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="suporte">
+                <div class="product-img">
+                    <img src="assets/format_pc_mockup.png" alt="Suporte Remoto Urgente" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>🆘 Suporte Remoto Urgente</h3>
+                    <p class="platform-badge">Atendimento Imediato</p>
+                    <p>Problema técnico agora? Resolvemos remotamente em minutos — vírus, erros, lentidão, instalação de programas e configurações.</p>
+                    <ul class="service-features">
+                        <li>Atendimento no mesmo dia</li>
+                        <li>Remoção de malware</li>
+                        <li>Instalação de softwares</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 80,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Suporte Remoto Urgente" data-price="R$ 59,90">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="impressora">
+                <div class="product-img">
+                    <img src="assets/printer_service_mockup.png" alt="Montagem e Configuração de Impressora" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>🖨️ Montagem e Configuração de Impressora</h3>
+                    <p class="platform-badge">USB / Wi-Fi / Rede</p>
+                    <p>Instalação completa de impressoras multifuncionais — drivers, conexão em rede, compartilhamento e testes de impressão em todos os dispositivos.</p>
+                    <ul class="service-features">
+                        <li>Instalação de drivers</li>
+                        <li>Configuração Wi-Fi e rede</li>
+                        <li>Compartilhamento entre PCs</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 80,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Montagem e Configuração de Impressora" data-price="R$ 69,90">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="office">
+                <div class="product-img">
+                    <img src="assets/service_pacote_office.png" alt="Pacote Office — Instalação e Capacitação" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>📄 Pacote Office — Instalação e Capacitação</h3>
+                    <p class="platform-badge">Word / Excel / PowerPoint</p>
+                    <p>Instalação, ativação e treinamento prático do Pacote Office — do básico ao avançado, personalizado para seu ritmo e necessidade.</p>
+                    <ul class="service-features">
+                        <li>Instalação e configuração</li>
+                        <li>Aulas práticas personalizadas</li>
+                        <li>Material de apoio incluso</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 80,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Pacote Office — Instalação e Capacitação" data-price="R$ 89,90">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="product-card glass-card reveal" data-service="sites">
+                <div class="product-img">
+                    <img src="assets/ai_dashboard_mockup.png" alt="Fazemos Sites para Você — site em produção" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>🌐 Fazemos Sites para Você</h3>
+                    <p class="platform-badge">Institucional / Landing / Portfólio</p>
+                    <p>Precisa de presença online profissional? Criamos sites modernos, responsivos e otimizados — do briefing à publicação em produção.</p>
+                    <ul class="service-features">
+                        <li>Design responsivo e moderno</li>
+                        <li>Publicação e domínio configurados</li>
+                        <li>Suporte pós-entrega incluso</li>
+                        <li>Valor inicial a partir de R$ 250,00, dependendo do site.</li>
+                    </ul>
+                    <div class="price-action">
+                        <span class="price">R$ 250,00</span>
+                        <button type="button" class="btn btn-primary btn-service" data-name="Fazemos Sites para Você" data-price="R$ 250,00">CONTRATAR</button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="benefits container" id="beneficios">
+        <div class="section-title reveal">
+            <span class="badge">✨ Por que nos escolher</span>
+            <h2>TI Profissional, <span class="text-gradient">Sem Complicação</span></h2>
+        </div>
+        <div class="grid benefits-grid">
+            <div class="card glass-card reveal">
+                <div class="icon">⚡</div>
+                <h3>Atendimento Ágil</h3>
+                <p>Orçamento rápido via WhatsApp e execução no prazo combinado — sem burocracia.</p>
+            </div>
+            <div class="card glass-card reveal">
+                <div class="icon">🖥️</div>
+                <h3>Online ou Presencial</h3>
+                <p>Suporte remoto para resolver na hora ou visita técnica quando necessário.</p>
+            </div>
+            <div class="card glass-card reveal">
+                <div class="icon">🛡️</div>
+                <h3>Segurança Garantida</h3>
+                <p>Seus dados protegidos em todo o processo, com backup antes de qualquer alteração.</p>
+            </div>
+            <div class="card glass-card reveal">
+                <div class="icon">🎯</div>
+                <h3>Solução Sob Medida</h3>
+                <p>Cada cliente é único — adaptamos o serviço à sua realidade e orçamento.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tech-services container" id="especialidades">
+        <div class="section-title reveal">
+            <span class="badge">🛠️ Portfólio Completo</span>
+            <h2>Nossas <span class="text-gradient">Especialidades</span></h2>
+            <p>Além dos serviços em destaque, oferecemos suporte técnico completo e soluções avançadas em TI.</p>
+        </div>
+
+        </div>
+
+        <div class="service-categories reveal">
+            <div class="category-tabs">
+                <button type="button" class="category-tab active" data-category="all">Todos</button>
+                <button type="button" class="category-tab" data-category="suporte">Suporte & Hardware</button>
+                <button type="button" class="category-tab" data-category="redes">Redes & Segurança</button>
+                <button type="button" class="category-tab" data-category="dados">Dados & IA</button>
+                <button type="button" class="category-tab" data-category="capacitacao">Capacitação</button>
+            </div>
+        </div>
+
+        <div class="grid services-grid reveal" id="services-grid">
+            <div class="service-card" data-category="suporte" data-service-name="Formatação e Instalação de SO">
+                <div class="service-card-icon">💿</div>
+                <div class="service-card-content">
+                    <h4>Formatação de Computadores e Instalação de SO</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="suporte" data-service-name="Montagem, Instalação e Manutenção de Microcomputadores">
+                <div class="service-card-icon">🖥️</div>
+                <div class="service-card-content">
+                    <h4>Montagem, Instalação e Manutenção de Microcomputadores</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="suporte" data-service-name="Estrutura e Funcionamento de Computadores">
+                <div class="service-card-icon">🔧</div>
+                <div class="service-card-content">
+                    <h4>Estrutura e Funcionamento de Computadores</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="suporte" data-service-name="Montagem e Configuração de Impressora">
+                <div class="service-card-icon">🖨️</div>
+                <div class="service-card-content">
+                    <h4>Montagem e Configuração de Impressora</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="redes" data-service-name="Configuração e Manutenção de Redes e Roteadores">
+                <div class="service-card-icon">🌐</div>
+                <div class="service-card-content">
+                    <h4>Configuração e Manutenção de Redes e Roteadores</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="redes" data-service-name="Cibersegurança">
+                <div class="service-card-icon">🔒</div>
+                <div class="service-card-content">
+                    <h4>Cibersegurança</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="redes" data-service-name="Introdução a Redes de Computadores e Infraestrutura">
+                <div class="service-card-icon">📡</div>
+                <div class="service-card-content">
+                    <h4>Introdução a Redes de Computadores e Infraestrutura</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="dados" data-service-name="Dashboard">
+                <div class="service-card-icon">📊</div>
+                <div class="service-card-content">
+                    <h4>Dashboard</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="dados" data-service-name="Introdução à Inteligência Artificial">
+                <div class="service-card-icon">🤖</div>
+                <div class="service-card-content">
+                    <h4>Introdução à Inteligência Artificial</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="dados" data-service-name="Banco de Dados">
+                <div class="service-card-icon">🗄️</div>
+                <div class="service-card-content">
+                    <h4>Banco de Dados</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="dados" data-service-name="Fazemos Sites para Você">
+                <div class="service-card-icon">🌐</div>
+                <div class="service-card-content">
+                    <h4>Fazemos Sites para Você</h4>
+                    <span class="service-tag popular">Mais solicitado</span>
+                </div>
+            </div>
+            <div class="service-card" data-category="capacitacao" data-service-name="Pacote Office (Word, Excel, PowerPoint)">
+                <div class="service-card-icon">📄</div>
+                <div class="service-card-content">
+                    <h4>Pacote Office (Word, Excel, PowerPoint)</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="capacitacao" data-service-name="Lógica de Programação e Fundamentos da Indústria 4.0">
+                <div class="service-card-icon">💻</div>
+                <div class="service-card-content">
+                    <h4>Lógica de Programação e Fundamentos da Indústria 4.0</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="capacitacao" data-service-name="Boas Práticas de Gestão em TI">
+                <div class="service-card-icon">📋</div>
+                <div class="service-card-content">
+                    <h4>Boas Práticas de Gestão em TI</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="capacitacao" data-service-name="Qualidade, Produtividade e Sustentabilidade nos Processos Industriais">
+                <div class="service-card-icon">🏭</div>
+                <div class="service-card-content">
+                    <h4>Qualidade, Produtividade e Sustentabilidade nos Processos Industriais</h4>
+                </div>
+            </div>
+            <div class="service-card" data-category="capacitacao" data-service-name="Saúde e Segurança no Trabalho">
+                <div class="service-card-icon">🦺</div>
+                <div class="service-card-content">
+                    <h4>Saúde e Segurança no Trabalho</h4>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Pedido Personalizado -->
-    <section class="custom-order container" id="pedido-personalizado">
-        <div class="section-title reveal">
-            <span class="badge">🎨 Do Seu Jeito</span>
-            <h2>Projeto <span class="text-gradient">Personalizado</span></h2>
-            <p>Precisa de algo específico? Descreva exatamente o que quer no seu site, currículo ou controle financeiro!
-            </p>
-        </div>
-
-        <div class="glass-card form-card reveal">
-            <form id="custom-order-form">
-                <div class="form-group">
-                    <label for="order-type">Qual projeto você deseja personalizar?</label>
-                    <select id="order-type" required>
-                        <option value="" disabled selected>Selecione uma opção</option>
-                        <option value="Currículo Profissional">Currículo Profissional</option>
-                        <option value="Site para Negócio Local">Site para Negócio Local</option>
-                        <option value="Controle Financeiro">Planilha de Controle Financeiro</option>
-                        <option value="Projeto Totalmente Novo">Outro / Começar do Zero</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="order-details">Descreva os detalhes (Ex: Cores, páginas, funções, estilo, etc)</label>
-                    <textarea id="order-details" rows="5"
-                        placeholder="Ex: Quero um currículo com tons azuis escuros / Um site para minha barbearia / Uma planilha com gráficos de pizza..."
-                        required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-glow" style="width: 100%;">ENVIAR MEU PEDIDO PARA
-                    ORÇAMENTO NO WHATSAPP</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
     <section class="how-it-works" id="como-funciona">
         <div class="container reveal">
             <div class="section-title">
-                <h2>⚡ Como <span class="text-gradient">Funciona</span></h2>
-                <p>O processo mais simples e rápido do mercado.</p>
+                <span class="badge">📋 Processo Simples</span>
+                <h2>Como <span class="text-gradient">Funciona</span></h2>
+                <p>Do primeiro contato à entrega — tudo transparente e sem surpresas.</p>
             </div>
 
             <div class="steps-container grid">
                 <div class="step glass-card">
                     <div class="step-num">1</div>
-                    <h4>Escolha</h4>
-                    <p>Selecione o produto ideal para a sua necessidade atual.</p>
+                    <h4>Escolha o Serviço</h4>
+                    <p>Selecione entre nossos serviços em destaque ou descreva sua necessidade específica.</p>
                 </div>
                 <div class="step glass-card">
                     <div class="step-num">2</div>
-                    <h4>Pague Fácil</h4>
-                    <p>Faça o pagamento via Pix instantâneo e seguro.</p>
+                    <h4>Receba o Orçamento</h4>
+                    <p>Enviamos proposta clara com valor, prazo e detalhes via WhatsApp em minutos.</p>
                 </div>
                 <div class="step glass-card">
                     <div class="step-num">3</div>
-                    <h4>Baixe</h4>
-                    <p>Receba o link de download na mesma hora no seu dispositivo.</p>
+                    <h4>Agende a Execução</h4>
+                    <p>Online ou presencial — você escolhe o melhor horário para o atendimento.</p>
                 </div>
                 <div class="step glass-card">
                     <div class="step-num">4</div>
-                    <h4>Aproveite</h4>
-                    <p>Comece a usar imediatamente, sem complicações.</p>
+                    <h4>Problema Resolvido</h4>
+                    <p>Serviço concluído com qualidade, suporte pós-atendimento e garantia de satisfação.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonails -->
     <section class="testimonials container" id="depoimentos">
         <div class="section-title reveal">
-            <h2>⭐ Portfólio e <span class="text-gradient">Feedbacks</span></h2>
+            <h2>⭐ O que Nossos <span class="text-gradient">Clientes Dizem</span></h2>
         </div>
 
         <div class="grid testimonials-grid">
-            <!-- Portfolio Item 1: Resume -->
             <div class="testimonial-card glass-card reveal">
-                <img src="assets/real_cv_uploaded.png" alt="Exemplo Currículo Real" class="portfolio-img">
+                <img src="assets/notebook_formatado.png" alt="Notebook após formatação completa" class="portfolio-img">
                 <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p>"Comprei esse template de currículo e no dia seguinte fui chamado para entrevista! Visual bacana."
-                </p>
-                <h5>- Marcos P., Engenheiro Civil</h5>
+                <p>"Meu notebook travava toda hora. Após a formatação ficou igual a novo! Serviço rápido, backup
+                    completo e instalação do Windows impecável."</p>
+                <h5>- Juliana R., Professora</h5>
             </div>
 
-            <!-- Portfolio Item 2: Site -->
             <div class="testimonial-card glass-card reveal" style="transition-delay: 0.1s;">
-                <img src="assets/real_site_uploaded.png" alt="Template de Site - Barbearia Toledo"
-                    class="portfolio-img">
+                <img src="assets/testimonial_ai_dashboard.png" alt="Dashboard com IA" class="portfolio-img">
                 <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p>"Graças a esse template consegui montar a Landing Page da Barbearia Toledo de forma profissional."
-                </p>
-                <h5>- Felipe Toledo, Barbeiro</h5>
+                <p>"O dashboard com IA transformou minha gestão. Agora vejo todos os indicadores da minha loja em tempo real. Incrível!"</p>
+                <h5>- Ricardo A., Empresário</h5>
             </div>
 
-            <!-- Portfolio Item 3: Sheet -->
             <div class="testimonial-card glass-card reveal" style="transition-delay: 0.2s;">
-                <img src="assets/real_sheet_uploaded.png" alt="Painel Financeiro - Planilha" class="portfolio-img">
+                <img src="assets/homelab_network.png" alt="Redes e Cibersegurança" class="portfolio-img">
                 <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p>"Os dashboards integrados são sensacionais. Me permitiu ter uma visão clara de todo o meu lucro
-                    líquido mensal!"</p>
-                <h5>- Carlos E., Gestor Comercial</h5>
+                <p>"Configurei minha rede corretamente e protegi meus dados contra invasores. Atendimento profissional e didático!"</p>
+                <h5>- Fernanda S., Advogada</h5>
+            </div>
+
+            <div class="testimonial-card glass-card reveal" style="transition-delay: 0.3s;">
+                <img src="assets/testimonial_pc_montado.png" alt="PC montado profissionalmente" class="portfolio-img">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"Montaram meu PC gamer do zero com perfeição. Organização dos cabos impecável e performance absurda. Super recomendo!"</p>
+                <h5>- Lucas M., Designer</h5>
+            </div>
+
+            <div class="testimonial-card glass-card reveal" style="transition-delay: 0.4s;">
+                <img src="assets/testimonial_roteador_pc.png" alt="Roteador configurado ao lado do computador" class="portfolio-img">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"A internet do escritório caía o tempo todo. Depois da configuração do roteador, sinal estável em todos os ambientes. Excelente!"</p>
+                <h5>- André T., Gerente Comercial</h5>
+            </div>
+
+            <div class="testimonial-card glass-card reveal" style="transition-delay: 0.5s;">
+                <img src="assets/testimonial_suporte_remoto.png" alt="Computador sendo acessado remotamente" class="portfolio-img">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>"Tive um problema urgente no trabalho e resolveram tudo remotamente em menos de 30 minutos. Atendimento rápido e muito profissional!"</p>
+                <h5>- Patrícia L., Contadora</h5>
             </div>
         </div>
     </section>
 
-    <!-- Call to Action -->
+    <section class="custom-order container" id="orcamento">
+        <div class="section-title reveal">
+            <span class="badge">💬 Orçamento Grátis</span>
+            <h2>Solicite seu <span class="text-gradient">Atendimento</span></h2>
+            <p>Descreva o que precisa e receba um orçamento personalizado no WhatsApp.</p>
+        </div>
+
+        <div class="glass-card form-card reveal">
+            <form id="custom-order-form">
+                <div class="form-group">
+                    <label for="order-type">Qual serviço você precisa?</label>
+                    <select id="order-type" required>
+                        <option value="" disabled selected>Selecione um serviço</option>
+                        <optgroup label="Mais Solicitados">
+                            <option value="Formatação e Instalação de SO">Formatação e Instalação de SO</option>
+                            <option value="Dashboard & Inteligência Artificial">Dashboard & Inteligência Artificial</option>
+                            <option value="Redes & Cibersegurança">Redes & Cibersegurança</option>
+                            <option value="Montagem e Manutenção de PC">Montagem e Manutenção de PC</option>
+                            <option value="Configuração de Redes e Roteadores">Configuração de Redes e Roteadores</option>
+                            <option value="Suporte Remoto Urgente">Suporte Remoto Urgente</option>
+                            <option value="Montagem e Configuração de Impressora">Montagem e Configuração de Impressora</option>
+                            <option value="Pacote Office — Instalação e Capacitação">Pacote Office — Instalação e Capacitação</option>
+                            <option value="Fazemos Sites para Você">Fazemos Sites para Você</option>
+                        </optgroup>
+                        <optgroup label="Suporte & Hardware">
+                            <option value="Montagem, Instalação e Manutenção de Microcomputadores">Montagem e Manutenção de Microcomputadores</option>
+                            <option value="Estrutura e Funcionamento de Computadores">Estrutura e Funcionamento de Computadores</option>
+                            <option value="Montagem e Configuração de Impressora">Montagem e Configuração de Impressora</option>
+                        </optgroup>
+                        <optgroup label="Redes & Segurança">
+                            <option value="Configuração e Manutenção de Redes e Roteadores">Configuração de Redes e Roteadores</option>
+                            <option value="Cibersegurança">Cibersegurança</option>
+                            <option value="Introdução a Redes de Computadores e Infraestrutura">Redes e Infraestrutura</option>
+                        </optgroup>
+                        <optgroup label="Dados & IA">
+                            <option value="Dashboard">Dashboard</option>
+                            <option value="Introdução à Inteligência Artificial">Inteligência Artificial</option>
+                            <option value="Fazemos Sites para Você">Fazemos Sites para Você</option>
+                            <option value="Banco de Dados">Banco de Dados</option>
+                        </optgroup>
+                        <optgroup label="Capacitação">
+                            <option value="Pacote Office (Word, Excel, PowerPoint)">Pacote Office</option>
+                            <option value="Lógica de Programação e Fundamentos da Indústria 4.0">Lógica de Programação</option>
+                            <option value="Boas Práticas de Gestão em TI">Gestão em TI</option>
+                            <option value="Qualidade, Produtividade e Sustentabilidade nos Processos Industriais">Qualidade Industrial</option>
+                            <option value="Saúde e Segurança no Trabalho">Saúde e Segurança no Trabalho</option>
+                        </optgroup>
+                        <option value="Outro">Outro serviço</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="order-details">Descreva sua necessidade</label>
+                    <textarea id="order-details" rows="5"
+                        placeholder="Ex: Meu notebook está lento e preciso formatar / Quero um dashboard para minha loja / Preciso configurar a rede do escritório..."
+                        required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-glow" style="width: 100%;">ENVIAR PARA ORÇAMENTO NO WHATSAPP</button>
+            </form>
+        </div>
+    </section>
+
     <section class="cta-section reveal">
         <div class="container glass-card cta-box">
-            <h2>🚀 Comece agora mesmo</h2>
-            <p>Pare de perder tempo criando do zero. Use modelos prontos e foque no que realmente importa.</p>
-            <a href="#produtos" class="btn btn-primary btn-lg btn-glow">Nossos planos</a>
+            <h2>🚀 Precisa de ajuda com TI agora?</h2>
+            <p>Não deixe problemas técnicos atrasarem seu dia. Fale conosco e resolva hoje mesmo.</p>
+            <div class="cta-actions">
+                <a href="#servicos" class="btn btn-primary btn-lg btn-glow">Ver Serviços</a>
+                <a href="https://wa.me/5563999145241?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20TI."
+                    target="_blank" class="btn btn-outline btn-lg">WhatsApp Direto</a>
+            </div>
         </div>
     </section>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Templates Prontos. Todos os direitos reservados.</p>
-            <p class="disclaimer">Produto digital. Entrega imediata após confirmação de pagamento.</p>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Profissionaliza<span class="text-gradient">.</span></h3>
+                    <p>Soluções completas em TI para pessoas e empresas.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Serviços</h4>
+                    <a href="#servicos">Mais Solicitados</a>
+                    <a href="#especialidades">Especialidades</a>
+                    <a href="#orcamento">Orçamento</a>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <a href="https://wa.me/5563999145241" target="_blank">WhatsApp</a>
+                </div>
+            </div>
+            <p class="footer-copy">&copy; 2026 Profissionaliza TI. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <!-- AI Chat Widget -->
     <div class="ai-chat-widget">
         <button class="ai-chat-toggle" id="ai-chat-toggle">
             <span class="chat-icon">🤖</span>
-            <span class="chat-text">Chat com IA</span>
+            <span class="chat-text">Assistente TI</span>
         </button>
 
         <div class="ai-chat-box glass-card" id="ai-chat-box">
             <div class="chat-header">
-                <h5>IA de Atendimento</h5>
+                <h5>Ana — Assistente Virtual</h5>
                 <span class="close-chat" id="close-chat">&times;</span>
             </div>
             <div class="chat-body" id="chat-body-content">
                 <div class="chat-msg bot-msg">
-                    Olá! Sou a assistente IA pronta para te ajudar. O que você precisa hoje? (Ex: site, currículo,
-                    planilhas...)
+                    Oi! 😊 Sou a Ana, assistente da Profissionaliza. Me conta: o que está acontecendo com seu computador ou rede?
                 </div>
             </div>
             <div class="chat-input-container" id="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Digite sua resposta..." autocomplete="off">
+                <input type="text" id="chat-input" placeholder="Digite sua dúvida..." autocomplete="off">
                 <button id="chat-send-btn">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
@@ -277,19 +634,17 @@
         </div>
     </div>
 
-    <!-- Checkout Modal -->
     <div class="modal-overlay" id="checkout-modal">
         <div class="modal-content glass-card">
             <span class="close-modal">&times;</span>
             <div class="modal-header">
-                <h3>Pagamento via Pix</h3>
-                <p id="modal-product-name">Produto Selecionado</p>
+                <h3>Contratar Serviço</h3>
+                <p id="modal-product-name">Serviço Selecionado</p>
                 <div class="price" id="modal-price">R$ 0,00</div>
             </div>
 
             <div class="modal-body">
                 <div class="pix-qrcode">
-                    <!-- QR Code Atualizado -->
                     <div class="qr-placeholder" style="padding: 0;">
                         <img src="assets/qrcode.jpg" alt="QR Code do Pix"
                             style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">
@@ -297,7 +652,7 @@
                 </div>
 
                 <div class="pix-code-container">
-                    <p class="pix-instructions">Escaneie o QR Code ou copie e cole o código abaixo:</p>
+                    <p class="pix-instructions">Escaneie o QR Code ou copie o código Pix:</p>
                     <div class="pix-copy-box">
                         <input type="text" value="56029f55-7e61-4d0b-bf2c-c1d486874e5d" id="pix-code" readonly>
                         <button class="btn-copy" id="btn-copy-pix">Copiar</button>
@@ -308,8 +663,8 @@
                     Aguardando pagamento... <span class="loader"></span>
                 </div>
 
-                <button class="btn btn-primary btn-glow btn-simulate" id="simulate-payment">Simular Pagamento
-                    Aprovado</button>
+                <button class="btn btn-primary btn-glow btn-simulate" id="simulate-payment">Simular Pagamento Aprovado</button>
+                <a href="#" id="modal-whatsapp" class="btn btn-outline btn-modal-wa" target="_blank">Prefiro falar no WhatsApp</a>
             </div>
         </div>
     </div>
