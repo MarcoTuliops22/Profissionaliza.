@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self' https://wa.me; frame-ancestors 'none'; object-src 'none'">
     <meta name="description"
         content="Serviços de TI profissionais: formatação de computadores, redes, cibersegurança, dashboards com IA e suporte técnico. Atendimento online e presencial.">
     <title>Profissionaliza | Serviços de TI</title>
@@ -44,7 +49,7 @@
             <div class="hero-actions">
                 <a href="#servicos" class="btn btn-primary btn-glow">Ver Serviços</a>
                 <a href="https://wa.me/5563999145241?text=Ol%C3%A1%2C%20preciso%20de%20um%20servi%C3%A7o%20de%20TI."
-                    target="_blank" class="btn btn-outline">Falar no WhatsApp</a>
+                    target="_blank" rel="noopener noreferrer" class="btn btn-outline">Falar no WhatsApp</a>
             </div>
 
             <div class="hero-design-element">
@@ -563,7 +568,7 @@
 
                 <div class="form-group">
                     <label for="order-details">Descreva sua necessidade</label>
-                    <textarea id="order-details" rows="5"
+                    <textarea id="order-details" rows="5" maxlength="2000"
                         placeholder="Ex: Meu notebook está lento e preciso formatar / Quero um dashboard para minha loja / Preciso configurar a rede do escritório..."
                         required></textarea>
                 </div>
@@ -580,7 +585,7 @@
             <div class="cta-actions">
                 <a href="#servicos" class="btn btn-primary btn-lg btn-glow">Ver Serviços</a>
                 <a href="https://wa.me/5563999145241?text=Ol%C3%A1%2C%20preciso%20de%20ajuda%20com%20TI."
-                    target="_blank" class="btn btn-outline btn-lg">WhatsApp Direto</a>
+                    target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-lg">WhatsApp Direto</a>
             </div>
         </div>
     </section>
@@ -600,7 +605,7 @@
                 </div>
                 <div class="footer-contact">
                     <h4>Contato</h4>
-                    <a href="https://wa.me/5563999145241" target="_blank">WhatsApp</a>
+                    <a href="https://wa.me/5563999145241" target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 </div>
             </div>
             <p class="footer-copy">&copy; 2026 Profissionaliza TI. Todos os direitos reservados.</p>
@@ -624,7 +629,7 @@
                 </div>
             </div>
             <div class="chat-input-container" id="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Digite sua dúvida..." autocomplete="off">
+                <input type="text" id="chat-input" placeholder="Digite sua dúvida..." autocomplete="off" maxlength="500">
                 <button id="chat-send-btn">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
@@ -664,7 +669,7 @@
                 </div>
 
                 <button class="btn btn-primary btn-glow btn-simulate" id="simulate-payment">Simular Pagamento Aprovado</button>
-                <a href="#" id="modal-whatsapp" class="btn btn-outline btn-modal-wa" target="_blank">Prefiro falar no WhatsApp</a>
+                <a href="#" id="modal-whatsapp" class="btn btn-outline btn-modal-wa" target="_blank" rel="noopener noreferrer">Prefiro falar no WhatsApp</a>
             </div>
         </div>
     </div>

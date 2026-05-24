@@ -1,5 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
     const WHATSAPP = '5563999145241';
+    const MAX_CHAT_LENGTH = 500;
+    const MAX_ORDER_DETAILS = 2000;
+    const MAX_SERVICE_NAME = 120;
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function sanitizeText(str, maxLength) {
+        if (typeof str !== 'string') return '';
+        return str.trim().slice(0, maxLength).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+    }
+
+    function safeOpen(url) {
+        if (typeof url !== 'string' || !/^https:\/\/wa\.me\/\d+/.test(url)) return;
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+        if (newWindow) newWindow.opener = null;
+    }
+
+    function createExternalLink(url, label, className) {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.className = className;
+        link.textContent = label;
+        return link;
+    }
 
   // Scroll Reveal Animation
     const reveals = document.querySelectorAll('.reveal');
@@ -96,12 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentServiceName = '';
 
     function openCheckoutModal(serviceName, servicePrice) {
-        currentServiceName = serviceName;
-        modalProductName.innerText = serviceName;
-        modalPrice.innerText = servicePrice;
+        currentServiceName = sanitizeText(serviceName, MAX_SERVICE_NAME);
+        const safePrice = sanitizeText(servicePrice, 30);
+        modalProductName.textContent = currentServiceName;
+        modalPrice.textContent = safePrice;
 
-        const waMessage = `Olá! Gostaria de contratar o serviço: *${serviceName}* (${servicePrice}). Podemos prosseguir?`;
+        const waMessage = `Olá! Gostaria de contratar o serviço: *${currentServiceName}* (${safePrice}). Podemos prosseguir?`;
         modalWhatsapp.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
+        modalWhatsapp.rel = 'noopener noreferrer';
 
         paymentStatus.innerHTML = 'Aguardando pagamento... <span class="loader"></span>';
         paymentStatus.classList.remove('success-message');
@@ -152,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Olá! Acabei de pagar pelo serviço: ${currentServiceName}. Gostaria de agendar o atendimento.`)}`;
-                window.open(waUrl, '_blank');
+                safeOpen(waUrl);
                 modal.classList.remove('active');
             }, 2000);
         }, 2000);
@@ -270,7 +305,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function appendMessage(text, sender) {
         const msgDiv = document.createElement('div');
         msgDiv.className = `chat-msg ${sender}-msg`;
-        msgDiv.innerHTML = text;
+
+        if (sender === 'user') {
+            msgDiv.textContent = sanitizeText(text, MAX_CHAT_LENGTH);
+        } else {
+            msgDiv.innerHTML = text;
+        }
+
         chatBodyContent.appendChild(msgDiv);
         chatBodyContent.scrollTop = chatBodyContent.scrollHeight;
     }
@@ -323,8 +364,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (chatContext.preference) msg += `*Detalhe:* ${chatContext.preference}\n`;
         msg += '\nGostaria de um orçamento e agendar o atendimento.';
         const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
-        const whatsBtn = `<a href="${waUrl}" target="_blank" class="btn btn-primary btn-glow" style="display:block;text-align:center;padding:0.8rem;font-size:0.9rem;border-radius:8px;margin-top:6px;">💬 Continuar no WhatsApp</a>`;
-        appendMessage(whatsBtn, 'bot');
+
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'chat-msg bot-msg';
+        msgDiv.appendChild(createExternalLink(
+            waUrl,
+            '💬 Continuar no WhatsApp',
+            'btn btn-primary btn-glow'
+        ));
+        msgDiv.querySelector('a').style.cssText = 'display:block;text-align:center;padding:0.8rem;font-size:0.9rem;border-radius:8px;margin-top:6px;';
+        chatBodyContent.appendChild(msgDiv);
+        chatBodyContent.scrollTop = chatBodyContent.scrollHeight;
     }
 
     function servicePitch(key) {
@@ -349,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!chatContext.problem) chatContext.problem = userMsg;
 
         const name = extractName(userMsg);
-        if (name) chatContext.userName = name;
+        if (name) chatContext.userName = sanitizeText(name, 40);
 
         if (isThanks(userMsg)) {
             await botReply('Por nada! 😊 Fico feliz em ajudar. Se precisar de mais alguma coisa, é só chamar!');
@@ -357,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (isGreeting(userMsg) && chatContext.messageCount <= 2) {
-            const hello = chatContext.userName ? `Olá, ${chatContext.userName}!` : 'Olá!';
+            const hello = chatContext.userName ? `Olá, ${escapeHtml(chatContext.userName)}!` : 'Olá!';
             await botReply(`${hello} Tudo bem? Me conta qual problema técnico você está enfrentando — PC lento, rede, impressora, formatação...`);
             addQuickReplies(['PC lento/travando', 'Problema na internet', 'Configurar impressora']);
             return;
@@ -412,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 chatContext.stage = 'exploring';
                 return;
             }
-            await botReply(`Anotei: "${userMsg}". O serviço de <strong>${SERVICES[chatContext.service].name}</strong> é a melhor escolha. Quer agendar pelo WhatsApp?`);
+            await botReply(`Anotei: "${escapeHtml(userMsg)}". O serviço de <strong>${escapeHtml(SERVICES[chatContext.service].name)}</strong> é a melhor escolha. Quer agendar pelo WhatsApp?`);
             addQuickReplies(['Sim, quero agendar!', 'Tenho mais dúvidas']);
             chatContext.stage = 'closing';
             return;
@@ -441,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     chatSendBtn.addEventListener('click', () => {
-        const text = chatInput.value.trim();
+        const text = sanitizeText(chatInput.value, MAX_CHAT_LENGTH);
         if (text) {
             chatInput.value = '';
             handleUserMessage(text);
@@ -491,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (detailsTextarea) {
                     setTimeout(() => {
                         detailsTextarea.focus();
-                        detailsTextarea.placeholder = `Descreva os detalhes para: ${serviceName}...`;
+                        detailsTextarea.placeholder = `Descreva os detalhes para: ${sanitizeText(serviceName, MAX_SERVICE_NAME)}...`;
                     }, 800);
                 }
             }
@@ -503,13 +553,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (orderForm) {
         orderForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const orderType = document.getElementById('order-type').value;
-            const orderDetails = document.getElementById('order-details').value;
+            const orderType = sanitizeText(document.getElementById('order-type').value, MAX_SERVICE_NAME);
+            const orderDetails = sanitizeText(document.getElementById('order-details').value, MAX_ORDER_DETAILS);
+
+            if (!orderType || !orderDetails) return;
 
             const message = `Olá! Gostaria de solicitar um *Serviço de TI*.\n\n*Serviço:* ${orderType}\n*Detalhes:* ${orderDetails}\n\nPodemos conversar sobre valores e prazos?`;
             const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
 
-            window.open(waUrl, '_blank');
+            safeOpen(waUrl);
             orderForm.reset();
         });
     }
