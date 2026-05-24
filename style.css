@@ -516,22 +516,24 @@ body {
 }
 
 .price-action {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
     margin-top: auto;
 }
 
 .price {
-    font-size: 1.5rem;
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
     font-weight: 800;
     color: white;
+    white-space: nowrap;
 }
 
 .price-action .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1.25rem;
+    white-space: nowrap;
+    justify-self: end;
 }
 
 .service-features {
@@ -936,17 +938,13 @@ body {
     }
 
     .price-action {
-        flex-direction: column;
-        align-items: stretch;
+        grid-template-columns: 1fr auto;
+        gap: 0.5rem 0.75rem;
     }
 
     .price-action .btn {
-        width: 100%;
-        text-align: center;
-    }
-
-    .price-action .price {
-        text-align: center;
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
     }
 
     .section-title {
