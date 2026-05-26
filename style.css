@@ -778,31 +778,6 @@ body {
     font-size: 1rem;
 }
 
-.visitor-counter {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-top: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-}
-
-.visitor-counter-icon {
-    font-size: 1rem;
-}
-
-.visitor-counter strong {
-    color: var(--primary);
-    font-weight: 700;
-    min-width: 1.5ch;
-}
-
-.visitor-counter.is-loading strong {
-    opacity: 0.5;
-}
-
 .footer-copy {
     color: var(--text-muted);
     font-size: 0.85rem;
