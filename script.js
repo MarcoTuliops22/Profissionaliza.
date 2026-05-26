@@ -134,7 +134,16 @@ document.addEventListener('DOMContentLoaded', () => {
         modalProductName.textContent = currentServiceName;
         modalPrice.textContent = safePrice;
 
-        const waMessage = `Olá! Gostaria de contratar o serviço: *${currentServiceName}* (${safePrice}). Podemos prosseguir?`;
+        const clientDescription = chatContext.userMessages.length
+            ? buildClientDescription()
+            : 'Cliente clicou em CONTRATAR. Não descreveu detalhes no chat — pergunte o que precisa.';
+
+        const waMessage = buildWhatsAppMessage({
+            source: 'Botão CONTRATAR',
+            serviceName: currentServiceName,
+            servicePrice: safePrice,
+            clientDescription
+        });
         modalWhatsapp.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
         modalWhatsapp.rel = 'noopener noreferrer';
 
@@ -150,6 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-service').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            const card = btn.closest('[data-service]');
+            if (card?.dataset.service) {
+                chatContext.service = card.dataset.service;
+            }
             openCheckoutModal(btn.dataset.name, btn.dataset.price);
         });
     });
@@ -186,7 +199,16 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSimulate.style.display = 'none';
 
             setTimeout(() => {
-                const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Olá! Acabei de pagar pelo serviço: ${currentServiceName}. Gostaria de agendar o atendimento.`)}`;
+                const clientDescription = chatContext.userMessages.length
+                    ? buildClientDescription()
+                    : `Cliente confirmou pagamento do serviço: ${currentServiceName}.`;
+
+                const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(buildWhatsAppMessage({
+                    source: 'Pagamento confirmado no site',
+                    serviceName: currentServiceName,
+                    servicePrice: null,
+                    clientDescription
+                }))}`;
                 safeOpen(waUrl);
                 modal.classList.remove('active');
             }, 2000);
@@ -210,17 +232,17 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         dashboard: {
             name: 'Dashboard & Inteligência Artificial',
-            price: 'R$ 109,90',
-            keywords: ['dashboard', 'painel', 'ia', 'inteligencia', 'dados', 'relatorio', 'power bi', 'excel', 'planilha', 'grafico']
+            price: 'R$ 120,00',
+            keywords: ['dashboard', 'painel', 'inteligencia artificial', 'inteligencia', 'power bi', 'planilha', 'grafico', 'indicadores', 'bi']
         },
         redes: {
             name: 'Redes & Cibersegurança',
-            price: 'R$ 89,90',
+            price: 'R$ 90,00',
             keywords: ['ciberseguranca', 'seguranca', 'invasor', 'firewall', 'hacker', 'proteger']
         },
         roteadores: {
             name: 'Configuração de Redes e Roteadores',
-            price: 'R$ 79,90',
+            price: 'R$ 80,00',
             keywords: ['rede', 'roteador', 'wifi', 'wi-fi', 'internet', 'sinal', 'instavel']
         },
         montagem: {
@@ -230,51 +252,150 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         suporte: {
             name: 'Suporte Remoto Urgente',
-            price: 'R$ 59,90',
+            price: 'R$ 80,00',
             keywords: ['remoto', 'urgente', 'agora', 'ajuda', 'erro', 'tela azul', 'malware']
         },
         impressora: {
             name: 'Montagem e Configuração de Impressora',
-            price: 'R$ 69,90',
+            price: 'R$ 80,00',
             keywords: ['impressora', 'imprimir', 'scanner', 'multifuncional', 'toner', 'epson', 'hp', 'canon']
         },
         office: {
             name: 'Pacote Office — Instalação e Capacitação',
-            price: 'R$ 89,90',
+            price: 'R$ 80,00',
             keywords: ['office', 'word', 'excel', 'powerpoint', 'planilha', 'documento', 'apresentacao']
         },
         sites: {
             name: 'Fazemos Sites para Você',
-            price: 'R$ 250,00',
+            price: 'a partir de R$ 2.500,00',
             keywords: ['site', 'website', 'pagina', 'landing', 'loja virtual', 'ecommerce', 'portfolio', 'web', 'dominio', 'hosting', 'criar site', 'fazer site']
         }
     };
+
+    const TRIVIAL_WHATSAPP_MESSAGES = new Set([
+        'oi', 'ola', 'olá', 'hey', 'e ai', 'eai', 'hello', 'hi',
+        'bom dia', 'boa tarde', 'boa noite',
+        'sim', 'nao', 'não', 'n', 'ok', 'beleza', 'claro', 'pode', 'perfeito',
+        'falar no whatsapp', 'ver precos', 'ver preços', 'tenho mais duvidas', 'tenho mais dúvidas',
+        'sim, quero agendar!', 'explicar melhor', 'computador', 'rede/internet', 'impressora'
+    ]);
 
     const chatContext = {
         stage: 'start',
         service: null,
         userName: null,
-        preference: '',
-        problem: '',
+        userMessages: [],
         messageCount: 0
     };
 
+    function isTrivialForWhatsApp(text) {
+        const norm = normalize(text).trim();
+        if (!norm || norm.length < 2) return true;
+        if (TRIVIAL_WHATSAPP_MESSAGES.has(norm)) return true;
+        if (isThanks(text)) return true;
+        if (isGreeting(text) && norm.length < 30) return true;
+        if ((isYes(text) || isNo(text)) && norm.length < 20) return true;
+        if (/^(whatsapp|falar no whats|marcar|agendar)$/.test(norm)) return true;
+        return false;
+    }
+
+    function recordUserMessage(text) {
+        const clean = sanitizeText(text, MAX_CHAT_LENGTH);
+        if (!clean || isTrivialForWhatsApp(clean)) return;
+        const last = chatContext.userMessages[chatContext.userMessages.length - 1];
+        if (last === clean) return;
+        chatContext.userMessages.push(clean);
+    }
+
+    function buildClientDescription() {
+        if (!chatContext.userMessages.length) {
+            return 'O cliente pediu contato pelo chat, mas não descreveu o problema em texto.';
+        }
+        const lines = chatContext.userMessages.map((msg, index) => {
+            if (chatContext.userMessages.length === 1) return msg;
+            return `${index + 1}. ${msg}`;
+        });
+        let text = lines.join('\n');
+        if (text.length > 1500) {
+            text = text.slice(0, 1497) + '...';
+        }
+        return text;
+    }
+
+    function buildWhatsAppMessage({ source, serviceName, servicePrice, clientDescription }) {
+        const lines = [
+            'Olá! Novo contato pelo site Profissionaliza.',
+            '',
+            `*Origem:* ${source}`
+        ];
+
+        if (chatContext.userName) {
+            lines.push(`*Nome do cliente:* ${chatContext.userName}`);
+        }
+        if (serviceName) {
+            const pricePart = servicePrice ? ` (${servicePrice})` : '';
+            lines.push(`*Serviço de interesse:* ${serviceName}${pricePart}`);
+        }
+
+        lines.push(
+            '',
+            `*O que o cliente descreveu que precisa:*`,
+            clientDescription,
+            '',
+            'Aguardo retorno para ajudar com orçamento e atendimento.'
+        );
+
+        return lines.join('\n');
+    }
+
     function normalize(text) {
         return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function keywordMatches(norm, keyword) {
+        const kw = normalize(keyword);
+        if (keyword.includes(' ')) {
+            return norm.includes(kw);
+        }
+        if (kw.length <= 4) {
+            return ` ${norm} `.includes(` ${kw} `);
+        }
+        return norm.includes(kw);
+    }
+
+    function scoreMessageForService(norm, serviceKey) {
+        return SERVICES[serviceKey].keywords.filter(kw => keywordMatches(norm, kw)).length;
     }
 
     function detectService(text) {
         const norm = normalize(text);
         let best = null;
         let bestScore = 0;
-        for (const [key, svc] of Object.entries(SERVICES)) {
-            const score = svc.keywords.filter(kw => norm.includes(kw)).length;
+
+        for (const key of Object.keys(SERVICES)) {
+            const score = scoreMessageForService(norm, key);
             if (score > bestScore) {
                 bestScore = score;
                 best = key;
             }
         }
+
         return bestScore > 0 ? best : null;
+    }
+
+    function updateDetectedService(userMsg) {
+        const norm = normalize(userMsg);
+        const detected = detectService(userMsg);
+        if (!detected) return;
+
+        const newScore = scoreMessageForService(norm, detected);
+        const currentScore = chatContext.service
+            ? scoreMessageForService(norm, chatContext.service)
+            : 0;
+
+        if (!chatContext.service || newScore > currentScore) {
+            chatContext.service = detected;
+        }
     }
 
     function isGreeting(text) {
@@ -357,12 +478,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showWhatsAppButton() {
         const svc = chatContext.service ? SERVICES[chatContext.service] : null;
-        let msg = 'Olá! Vim pelo chat do site.\n\n';
-        if (chatContext.userName) msg += `*Nome:* ${chatContext.userName}\n`;
-        if (svc) msg += `*Serviço:* ${svc.name} (${svc.price})\n`;
-        if (chatContext.problem) msg += `*Problema:* ${chatContext.problem}\n`;
-        if (chatContext.preference) msg += `*Detalhe:* ${chatContext.preference}\n`;
-        msg += '\nGostaria de um orçamento e agendar o atendimento.';
+        const msg = buildWhatsAppMessage({
+            source: 'Chat do site',
+            serviceName: svc?.name || null,
+            servicePrice: svc?.price || null,
+            clientDescription: buildClientDescription()
+        });
         const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 
         const msgDiv = document.createElement('div');
@@ -375,6 +496,25 @@ document.addEventListener('DOMContentLoaded', () => {
         msgDiv.querySelector('a').style.cssText = 'display:block;text-align:center;padding:0.8rem;font-size:0.9rem;border-radius:8px;margin-top:6px;';
         chatBodyContent.appendChild(msgDiv);
         chatBodyContent.scrollTop = chatBodyContent.scrollHeight;
+    }
+
+    const PRICE_LIST_ITEMS = [
+        { key: 'formatacao', emoji: '💿', label: 'Formatação' },
+        { key: 'montagem', emoji: '🖥️', label: 'Montagem de PC' },
+        { key: 'roteadores', emoji: '🌐', label: 'Redes/Roteador' },
+        { key: 'redes', emoji: '🔒', label: 'Cibersegurança' },
+        { key: 'suporte', emoji: '🆘', label: 'Suporte Remoto' },
+        { key: 'impressora', emoji: '🖨️', label: 'Impressora' },
+        { key: 'office', emoji: '📄', label: 'Pacote Office' },
+        { key: 'sites', emoji: '🌐', label: 'Sites' },
+        { key: 'dashboard', emoji: '🧠', label: 'Dashboard + IA' }
+    ];
+
+    function buildServicesPriceListHtml() {
+        return PRICE_LIST_ITEMS.map(({ key, emoji, label }) => {
+            const svc = SERVICES[key];
+            return `${emoji} ${label} — <strong>${svc.price}</strong>`;
+        }).join('<br>');
     }
 
     function servicePitch(key) {
@@ -396,7 +536,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleUserMessage(userMsg) {
         appendMessage(userMsg, 'user');
         chatContext.messageCount++;
-        if (!chatContext.problem) chatContext.problem = userMsg;
 
         const name = extractName(userMsg);
         if (name) chatContext.userName = sanitizeText(name, 40);
@@ -414,12 +553,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (isPriceQuestion(userMsg) && !chatContext.service) {
-            await botReply('Claro! Nossos principais serviços:<br><br>💿 Formatação — <strong>R$ 100</strong><br>🖥️ Montagem de PC — <strong>R$ 150</strong><br>🌐 Redes/Roteador — <strong>R$ 79,90</strong><br>🔒 Cibersegurança — <strong>R$ 89,90</strong><br>🆘 Suporte Remoto — <strong>R$ 59,90</strong><br>🖨️ Impressora — <strong>R$ 69,90</strong><br>📄 Pacote Office — <strong>R$ 89,90</strong><br>🌐 Sites — <strong>R$ 250,00</strong><br>🧠 Dashboard + IA — <strong>R$ 109,90</strong><br><br>Qual te interessa?');
+            await botReply(`Claro! Nossos principais serviços:<br><br>${buildServicesPriceListHtml()}<br><br>Qual te interessa?`);
             return;
         }
 
-        const detected = detectService(userMsg);
-        if (detected) chatContext.service = detected;
+        recordUserMessage(userMsg);
+
+        updateDetectedService(userMsg);
 
         if (/whatsapp|falar no whats|marcar|agendar/.test(normalize(userMsg))) {
             await botReply('Perfeito! Clicando abaixo você vai direto pro WhatsApp com tudo que conversamos. 🚀');
@@ -448,7 +588,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (chatContext.stage === 'preference') {
-            chatContext.preference = userMsg;
             if (isYes(userMsg)) {
                 await botReply('Ótimo! Vou te conectar com nosso especialista no WhatsApp. 👇');
                 showWhatsAppButton();
@@ -468,9 +607,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (detected) {
+        if (chatContext.service) {
             chatContext.stage = 'preference';
-            await botReply(servicePitch(detected));
+            await botReply(servicePitch(chatContext.service));
             return;
         }
 
@@ -558,7 +697,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!orderType || !orderDetails) return;
 
-            const message = `Olá! Gostaria de solicitar um *Serviço de TI*.\n\n*Serviço:* ${orderType}\n*Detalhes:* ${orderDetails}\n\nPodemos conversar sobre valores e prazos?`;
+            const message = buildWhatsAppMessage({
+                source: 'Formulário de orçamento',
+                serviceName: orderType,
+                servicePrice: null,
+                clientDescription: orderDetails
+            });
             const waUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
 
             safeOpen(waUrl);
