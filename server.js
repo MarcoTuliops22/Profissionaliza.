@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
 const path = require('path');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,7 +26,27 @@ const BLOCKED_STATIC = new Set([
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX = 15;
+const VISITOR_RATE_LIMIT_MAX = 30;
 const requestCounts = new Map();
+const VISITORS_FILE = path.join(__dirname, 'data', 'visitors.json');
+
+function readVisitorCount() {
+    try {
+        if (fs.existsSync(VISITORS_FILE)) {
+            const data = JSON.parse(fs.readFileSync(VISITORS_FILE, 'utf8'));
+            const count = Number(data?.count);
+            return Number.isFinite(count) && count >= 0 ? count : 0;
+        }
+    } catch (error) {
+        console.error('Erro ao ler contador de visitantes:', error.message);
+    }
+    return 0;
+}
+
+function writeVisitorCount(count) {
+    fs.mkdirSync(path.dirname(VISITORS_FILE), { recursive: true });
+    fs.writeFileSync(VISITORS_FILE, JSON.stringify({ count }, null, 2), 'utf8');
+}
 
 function securityHeaders(req, res, next) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -64,6 +84,7 @@ function blockSensitiveFiles(req, res, next) {
     if (
         req.path.includes('..') ||
         req.path.includes('/node_modules') ||
+        req.path.startsWith('/data') ||
         req.path.startsWith('/.') ||
         BLOCKED_STATIC.has(requested)
     ) {
@@ -74,20 +95,26 @@ function blockSensitiveFiles(req, res, next) {
 }
 
 function rateLimitApi(req, res, next) {
-    if (req.path !== '/api/generate') return next();
+    const limits = {
+        '/api/visitors': VISITOR_RATE_LIMIT_MAX
+    };
+    const maxRequests = limits[req.path];
+
+    if (!maxRequests || req.method === 'GET') return next();
 
     const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    const key = `${req.path}:${ip}`;
     const now = Date.now();
-    let record = requestCounts.get(ip);
+    let record = requestCounts.get(key);
 
     if (!record || now - record.start > RATE_LIMIT_WINDOW_MS) {
         record = { start: now, count: 0 };
     }
 
     record.count += 1;
-    requestCounts.set(ip, record);
+    requestCounts.set(key, record);
 
-    if (record.count > RATE_LIMIT_MAX) {
+    if (record.count > maxRequests) {
         return res.status(429).json({
             success: false,
             error: 'Muitas requisições. Aguarde um momento e tente novamente.'
@@ -129,74 +156,14 @@ app.use(express.static(__dirname, {
     index: 'index.html'
 }));
 
-let genAI = null;
-if (process.env.GEMINI_API_KEY) {
-    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-}
+app.get('/api/visitors', (req, res) => {
+    res.json({ success: true, count: readVisitorCount() });
+});
 
-app.post('/api/generate', async (req, res) => {
-    if (!genAI) {
-        return res.status(503).json({
-            success: false,
-            error: 'Serviço de IA indisponível no momento.'
-        });
-    }
-
-    try {
-        const orderType = sanitizeInput(req.body?.orderType, 120);
-        const orderDetails = sanitizeInput(req.body?.orderDetails, 2000);
-
-        if (!orderType || !orderDetails) {
-            return res.status(400).json({
-                success: false,
-                error: 'Informe o tipo de serviço e os detalhes do pedido.'
-            });
-        }
-
-        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-        const prompt = `Você é um desenvolvedor de software/designer experiente trabalhando em uma fábrica de templates rápidos.
-O cliente solicitou um projeto do tipo: "${orderType}".
-Os detalhes solicitados pelo cliente foram: "${orderDetails}".
-
-Instruções:
-- Se o projeto for um "Site", gere o código HTML e CSS completo, moderno, em um único arquivo, pronto para uso.
-- Se for um "Currículo", crie um template limpo e estiloso (preferencialmente já usando HTML simples ou Markdown estruturado).
-- Se for uma "Planilha", entregue o conteúdo formatado como um arquivo CSV delimitado por vírgulas válido.
-Responda APENAS com o código, sem textos introdutórios ou de ajuda do tipo 'Aqui está o seu site'. Remova marcações de blocos de código (ex: \`\`\`html) do retorno para que o código vá limpo.`;
-
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const textCodeOutput = response.text();
-
-        let filename = 'template.txt';
-        let mimeType = 'text/plain';
-
-        const normalizedType = orderType.toLowerCase();
-        if (normalizedType.includes('site')) {
-            filename = 'website-personalizado.html';
-            mimeType = 'text/html';
-        } else if (normalizedType.includes('currículo') || normalizedType.includes('curriculo')) {
-            filename = 'curriculo.html';
-            mimeType = 'text/html';
-        } else if (normalizedType.includes('planilha') || normalizedType.includes('financeiro')) {
-            filename = 'controle-financeiro.csv';
-            mimeType = 'text/csv';
-        }
-
-        res.json({
-            success: true,
-            filename,
-            mimeType,
-            content: textCodeOutput
-        });
-    } catch (error) {
-        console.error('Erro ao invocar o Gemini:', error.message);
-        res.status(500).json({
-            success: false,
-            error: isProduction ? 'Falha na geração do template.' : 'Falha na geração do template pela IA.'
-        });
-    }
+app.post('/api/visitors', (req, res) => {
+    const count = readVisitorCount() + 1;
+    writeVisitorCount(count);
+    res.json({ success: true, count });
 });
 
 app.use((err, req, res, next) => {
@@ -206,7 +173,4 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
     console.log(`[Servidor] Operando em: http://localhost:${port}`);
-    if (!process.env.GEMINI_API_KEY) {
-        console.warn('[Aviso] GEMINI_API_KEY não configurada — rota /api/generate desabilitada.');
-    }
 });

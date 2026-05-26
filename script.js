@@ -687,6 +687,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Visitor counter
+    const visitorCounter = document.getElementById('visitor-counter');
+    const visitorCountEl = document.getElementById('visitor-count');
+    const VISIT_SESSION_KEY = 'profissionaliza_visit_counted';
+    const VISIT_LOCAL_KEY = 'profissionaliza_visit_local_count';
+
+    async function initVisitorCounter() {
+        if (!visitorCounter || !visitorCountEl) return;
+
+        visitorCounter.classList.add('is-loading');
+
+        const showCount = (count) => {
+            visitorCountEl.textContent = Number(count).toLocaleString('pt-BR');
+            visitorCounter.classList.remove('is-loading');
+        };
+
+        function fallbackToLocalCounter(alreadyCounted) {
+            try {
+                const raw = localStorage.getItem(VISIT_LOCAL_KEY);
+                const current = Number(raw);
+                const base = Number.isFinite(current) && current >= 0 ? current : 0;
+
+                if (!alreadyCounted) {
+                    const next = base + 1;
+                    localStorage.setItem(VISIT_LOCAL_KEY, String(next));
+                    showCount(next);
+                    // Aviso visual via tooltip (não altera o texto do contador)
+                    visitorCounter.title = 'Modo local: rode o servidor (npm start) para contar o total real.';
+                    return;
+                }
+
+                // Se já contou na sessão, usa o valor local armazenado
+                showCount(base);
+                visitorCounter.title = 'Modo local: rode o servidor (npm start) para contar o total real.';
+            } catch {
+                visitorCountEl.textContent = '—';
+                visitorCounter.classList.remove('is-loading');
+            }
+        }
+
+        try {
+            const alreadyCounted = sessionStorage.getItem(VISIT_SESSION_KEY);
+            const response = await fetch(
+                '/api/visitors',
+                alreadyCounted ? { method: 'GET' } : { method: 'POST' }
+            );
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                if (!alreadyCounted) {
+                    sessionStorage.setItem(VISIT_SESSION_KEY, '1');
+                }
+                showCount(data.count);
+                return;
+            }
+        } catch {
+            // fallback when API is unavailable (e.g. opening HTML without server)
+            const alreadyCounted = sessionStorage.getItem(VISIT_SESSION_KEY);
+            fallbackToLocalCounter(Boolean(alreadyCounted));
+        }
+
+        visitorCountEl.textContent = '—';
+        visitorCounter.classList.remove('is-loading');
+    }
+
+    initVisitorCounter();
+
     // Custom Order Form
     const orderForm = document.getElementById('custom-order-form');
     if (orderForm) {

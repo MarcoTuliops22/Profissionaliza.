@@ -5,5 +5,8 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+data/visitors.json
+data/guardian-report.json
+data/guardian-log.json
 node_modules/
 .env
