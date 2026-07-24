@@ -1524,4 +1524,37 @@ body {
     }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SEGURANÇA — Honeypot anti-bot
+   Oculto para humanos (aria-hidden + tabindex=-1 no HTML), mas visível
+   para bots que varrem o DOM. Bots preenchem → request bloqueado no JS.
+   NÃO usar display:none — bots detectam e ignoram o campo.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    tabindex: -1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SEGURANÇA — Feedback de rate limit no chat
+   ═══════════════════════════════════════════════════════════════════════════ */
+.chat-rate-limit-warning {
+    font-size: 0.78rem;
+    color: #f87171;
+    text-align: center;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    margin: 4px 0;
+}
+
+
 

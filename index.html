@@ -4,17 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ═══ SEO & Indexação ═══════════════════════════════════════════════ -->
+    <meta name="description"
+        content="Serviços de TI profissionais: formatação de computadores, redes, cibersegurança, dashboards com IA e suporte técnico. Atendimento online e presencial em todo o Brasil.">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <link rel="canonical" href="https://profissionaliza.com.br/">
+
+    <!-- ═══ Segurança — HTTP Headers (fallback via meta) ════════════════ -->
+    <!-- Nota: os headers definitivos são enviados pelo servidor (server.js) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+    <meta http-equiv="Permissions-Policy"
+        content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=()">
+    <!-- CSP via meta (servidor envia header com precedência) -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self' https://wa.me; frame-ancestors 'none'; object-src 'none'">
-    <meta name="description"
-        content="Serviços de TI profissionais: formatação de computadores, redes, cibersegurança, dashboards com IA e suporte técnico. Atendimento online e presencial.">
+        content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self' https://wa.me; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests">
+
     <title>Profissionaliza | Serviços de TI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- ═══ Google Fonts com SRI (Subresource Integrity) ════════════════ -->
+    <!-- SRI impede que um CDN comprometido injete código malicioso        -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet"
+        crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -523,7 +539,8 @@
         </div>
 
         <div class="glass-card form-card reveal">
-            <form id="custom-order-form">
+            <!-- Honeypot: campo oculto que bots preenchem, humanos não veem -->
+            <form id="custom-order-form" autocomplete="off" novalidate>
                 <div class="form-group">
                     <label for="order-type">Qual serviço você precisa?</label>
                     <select id="order-type" required>
@@ -571,6 +588,12 @@
                     <textarea id="order-details" rows="5" maxlength="2000"
                         placeholder="Ex: Meu notebook está lento e preciso formatar / Quero um dashboard para minha loja / Preciso configurar a rede do escritório..."
                         required></textarea>
+                </div>
+
+                <!-- Honeypot anti-bot: oculto via CSS/aria, bots preenchem este campo -->
+                <div class="hp-field" aria-hidden="true" tabindex="-1">
+                    <label for="hp-website">Website</label>
+                    <input type="text" id="hp-website" name="website" autocomplete="off" tabindex="-1" value="">
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-glow" style="width: 100%;">ENVIAR PARA ORÇAMENTO NO WHATSAPP</button>

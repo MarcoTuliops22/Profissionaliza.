@@ -4,13 +4,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_ORDER_DETAILS = 2000;
     const MAX_SERVICE_NAME = 120;
 
+    // ═══ SEGURANÇA — Detecção de comportamento de bot ════════════════════
+    // Humanos movem o mouse antes de interagir. Bots não.
+    let humanInteractionDetected = false;
+    let mouseMoveCount = 0;
+    const BOT_INTERACTION_THRESHOLD = 2; // mínimo de eventos de mouse para considerar humano
+
+    const _detectHuman = () => {
+        mouseMoveCount++;
+        if (mouseMoveCount >= BOT_INTERACTION_THRESHOLD) {
+            humanInteractionDetected = true;
+            document.removeEventListener('mousemove', _detectHuman);
+            document.removeEventListener('touchstart', _detectHuman);
+            document.removeEventListener('keydown', _detectHuman);
+        }
+    };
+    document.addEventListener('mousemove', _detectHuman, { passive: true });
+    document.addEventListener('touchstart', _detectHuman, { passive: true });
+    document.addEventListener('keydown', _detectHuman, { passive: true });
+
+    // ═══ SEGURANÇA — Rate limit do chat (cliente) ═════════════════════
+    const CHAT_RATE_LIMIT = 10;  // máx mensagens por janela
+    const CHAT_RATE_WINDOW = 60_000; // 60 segundos
+    let chatMessageTimestamps = [];
+
+    function isChatRateLimited() {
+        const now = Date.now();
+        chatMessageTimestamps = chatMessageTimestamps.filter(ts => now - ts < CHAT_RATE_WINDOW);
+        if (chatMessageTimestamps.length >= CHAT_RATE_LIMIT) return true;
+        chatMessageTimestamps.push(now);
+        return false;
+    }
+
     function escapeHtml(str) {
         return String(str)
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
+            .replace(/'/g, '&#39;')
+            .replace(/`/g, '&#96;');  // evita template literal injection
+    }
+
+    // Sanitização reforçada para conteúdo HTML do bot (evita DOM XSS)
+    function sanitizeBotHtml(html) {
+        // Permite apenas tags seguras: <strong>, <br>, <em>
+        return String(html)
+            .replace(/<(?!\/?(?:strong|br|em)\b)[^>]*>/gi, '') // remove tags não permitidas
+            .replace(/javascript:/gi, '')  // bloqueia javascript: URIs
+            .replace(/on\w+\s*=/gi, '');   // remove event handlers inline
     }
 
     function sanitizeText(str, maxLength) {
@@ -228,47 +270,47 @@ document.addEventListener('DOMContentLoaded', () => {
         formatacao: {
             name: 'Formatação e Instalação de SO',
             price: 'R$ 100,00',
-            keywords: ['formatar', 'formatacao', 'lento', 'lenta', 'travando', 'travado', 'virus', 'windows', 'notebook', 'reinstalar']
+            keywords: ['formatar', 'formatacao', 'formata', 'lento', 'lenta', 'travando', 'travado', 'virus', 'windows', 'linux', 'notebook', 'reinstalar', 'sistema operacional', 'pc lento', 'computador lento']
         },
         dashboard: {
             name: 'Dashboard & Inteligência Artificial',
             price: 'R$ 120,00',
-            keywords: ['dashboard', 'painel', 'inteligencia artificial', 'inteligencia', 'power bi', 'planilha', 'grafico', 'indicadores', 'bi']
+            keywords: ['dashboard', 'painel', 'inteligencia artificial', 'power bi', 'grafico', 'indicadores', 'relatorio', 'bi', 'automacao', 'dados', 'gemini', 'chatgpt']
         },
         redes: {
             name: 'Redes & Cibersegurança',
             price: 'R$ 90,00',
-            keywords: ['ciberseguranca', 'seguranca', 'invasor', 'firewall', 'hacker', 'proteger']
+            keywords: ['ciberseguranca', 'seguranca', 'invasor', 'firewall', 'hacker', 'proteger dados', 'senha', 'vpn', 'virus na rede', 'ataque']
         },
         roteadores: {
             name: 'Configuração de Redes e Roteadores',
             price: 'R$ 80,00',
-            keywords: ['rede', 'roteador', 'wifi', 'wi-fi', 'internet', 'sinal', 'instavel']
+            keywords: ['roteador', 'wifi', 'wi-fi', 'internet caindo', 'internet lenta', 'rede lenta', 'sinal fraco', 'sem sinal', 'instavel', 'conexao', 'repetidor', 'cabo de rede', 'sem internet', 'rede caindo']
         },
         montagem: {
             name: 'Montagem e Manutenção de PC',
             price: 'R$ 150,00',
-            keywords: ['montar', 'montagem', 'gamer', 'upgrade', 'ssd', 'memoria', 'hardware', 'peca']
+            keywords: ['montar', 'montagem', 'gamer', 'upgrade', 'ssd', 'memoria ram', 'hardware', 'peca', 'placa de video', 'processador', 'fonte', 'gabinete', 'cooler']
         },
         suporte: {
             name: 'Suporte Remoto Urgente',
             price: 'R$ 80,00',
-            keywords: ['remoto', 'urgente', 'agora', 'ajuda', 'erro', 'tela azul', 'malware']
+            keywords: ['suporte remoto', 'remoto', 'urgente', 'tela azul', 'malware', 'problema urgente', 'travou agora', 'parou de funcionar', 'nao liga', 'nao abre']
         },
         impressora: {
             name: 'Montagem e Configuração de Impressora',
             price: 'R$ 80,00',
-            keywords: ['impressora', 'imprimir', 'scanner', 'multifuncional', 'toner', 'epson', 'hp', 'canon']
+            keywords: ['impressora', 'imprimir', 'scanner', 'multifuncional', 'toner', 'epson', 'hp', 'canon', 'nao imprime', 'impressao', 'cartucho']
         },
         office: {
             name: 'Pacote Office — Instalação e Capacitação',
             price: 'R$ 80,00',
-            keywords: ['office', 'word', 'excel', 'powerpoint', 'planilha', 'documento', 'apresentacao']
+            keywords: ['office', 'word', 'excel', 'powerpoint', 'planilha excel', 'documento word', 'apresentacao', 'microsoft office', 'instalar office', 'aprender excel']
         },
         sites: {
             name: 'Fazemos Sites para Você',
             price: 'a partir de R$ 2.500,00',
-            keywords: ['site', 'website', 'pagina', 'landing', 'loja virtual', 'ecommerce', 'portfolio', 'web', 'dominio', 'hosting', 'criar site', 'fazer site']
+            keywords: ['site', 'website', 'pagina web', 'landing page', 'loja virtual', 'ecommerce', 'portfolio online', 'dominio', 'hospedagem', 'criar site', 'fazer site', 'loja online']
         }
     };
 
@@ -354,12 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function keywordMatches(norm, keyword) {
         const kw = normalize(keyword);
-        if (keyword.includes(' ')) {
-            return norm.includes(kw);
-        }
-        if (kw.length <= 4) {
-            return ` ${norm} `.includes(` ${kw} `);
-        }
+        // Always use substring match — it works for both single and multi-word phrases
         return norm.includes(kw);
     }
 
@@ -428,9 +465,11 @@ document.addEventListener('DOMContentLoaded', () => {
         msgDiv.className = `chat-msg ${sender}-msg`;
 
         if (sender === 'user') {
+            // Usuário: sempre textContent (nunca innerHTML) — previne XSS
             msgDiv.textContent = sanitizeText(text, MAX_CHAT_LENGTH);
         } else {
-            msgDiv.innerHTML = text;
+            // Bot: sanitiza o HTML permitindo apenas tags seguras
+            msgDiv.innerHTML = sanitizeBotHtml(text);
         }
 
         chatBodyContent.appendChild(msgDiv);
@@ -547,8 +586,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isGreeting(userMsg) && chatContext.messageCount <= 2) {
             const hello = chatContext.userName ? `Olá, ${escapeHtml(chatContext.userName)}!` : 'Olá!';
-            await botReply(`${hello} Tudo bem? Me conta qual problema técnico você está enfrentando — PC lento, rede, impressora, formatação...`);
-            addQuickReplies(['PC lento/travando', 'Problema na internet', 'Configurar impressora']);
+            await botReply(`${hello} Tudo bem? Me conta qual problema técnico você está enfrentando — PC lento, internet caindo, impressora, formatação...`);
+            addQuickReplies(['PC lento/travando', 'Internet caindo', 'Configurar impressora']);
             return;
         }
 
@@ -614,14 +653,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (chatContext.stage === 'start' || chatContext.stage === 'exploring') {
-            await botReply('Entendi! Para te indicar a melhor solução: é algo com <strong>computador</strong>, <strong>rede/internet</strong>, <strong>impressora</strong> ou <strong>dados/relatórios</strong>?');
-            addQuickReplies(['Computador', 'Rede/Internet', 'Impressora', 'Ver preços']);
+            await botReply('Entendi! Para te indicar a melhor solução: é algo com <strong>computador</strong>, <strong>internet/roteador</strong>, <strong>impressora</strong> ou <strong>dados/relatórios</strong>?');
+            addQuickReplies(['Computador lento', 'Internet caindo', 'Impressora', 'Ver preços']);
             chatContext.stage = 'exploring';
             return;
         }
 
         await botReply('Pode descrever com mais detalhes? Ou se preferir, falo direto com nosso técnico no WhatsApp — é rapidinho!');
-        addQuickReplies(['Falar no WhatsApp', 'PC lento', 'Impressora não imprime']);
+        addQuickReplies(['Falar no WhatsApp', 'PC lento/travando', 'Internet caindo']);
     }
 
     function initChatQuickReplies() {
@@ -631,10 +670,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chatSendBtn.addEventListener('click', () => {
         const text = sanitizeText(chatInput.value, MAX_CHAT_LENGTH);
-        if (text) {
-            chatInput.value = '';
-            handleUserMessage(text);
+        if (!text) return;
+
+        // Rate limit do chat (cliente): evita spam e abuso
+        if (isChatRateLimited()) {
+            const warn = document.createElement('div');
+            warn.className = 'chat-rate-limit-warning';
+            warn.textContent = '⚠️ Aguarde um momento antes de enviar mais mensagens.';
+            chatBodyContent.appendChild(warn);
+            chatBodyContent.scrollTop = chatBodyContent.scrollHeight;
+            setTimeout(() => warn.remove(), 4000);
+            return;
         }
+
+        chatInput.value = '';
+        handleUserMessage(text);
     });
 
     chatInput.addEventListener('keypress', (e) => {
@@ -687,15 +737,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Custom Order Form
+    // Custom Order Form — com proteções de segurança
     const orderForm = document.getElementById('custom-order-form');
     if (orderForm) {
+        let formSubmitCooldown = false; // debounce anti double-submit
+        let formSubmitCount = 0;        // rate limit de envios
+        const FORM_RATE_LIMIT = 3;      // máx 3 envios por sessão
+        const FORM_DEBOUNCE_MS = 3000;  // espera 3s entre envios
+
         orderForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            // ══ 1. HONEYPOT: se o campo oculto foi preenchido, é bot ══
+            const honeypot = document.getElementById('hp-website');
+            if (honeypot && honeypot.value.trim() !== '') {
+                // Simula sucesso ao bot (não revelar a detecção)
+                orderForm.reset();
+                return;
+            }
+
+            // ══ 2. BOT BEHAVIOR: sem interação humana detectada ══
+            if (!humanInteractionDetected) {
+                // Silencia — não dá feedback ao bot
+                return;
+            }
+
+            // ══ 3. DEBOUNCE: evita duplo envio rápido ══
+            if (formSubmitCooldown) return;
+
+            // ══ 4. RATE LIMIT de sessão ══
+            formSubmitCount++;
+            if (formSubmitCount > FORM_RATE_LIMIT) {
+                const submitBtn = orderForm.querySelector('[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.textContent = 'Limite de envios atingido. Use o WhatsApp.';
+                    submitBtn.disabled = true;
+                }
+                return;
+            }
+
             const orderType = sanitizeText(document.getElementById('order-type').value, MAX_SERVICE_NAME);
             const orderDetails = sanitizeText(document.getElementById('order-details').value, MAX_ORDER_DETAILS);
 
             if (!orderType || !orderDetails) return;
+
+            // Ativa debounce
+            formSubmitCooldown = true;
+            const submitBtn = orderForm.querySelector('[type="submit"]');
+            const originalText = submitBtn?.textContent || '';
+            if (submitBtn) {
+                submitBtn.textContent = 'Enviando...';
+                submitBtn.disabled = true;
+            }
+            setTimeout(() => {
+                formSubmitCooldown = false;
+                if (submitBtn) {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, FORM_DEBOUNCE_MS);
 
             const message = buildWhatsAppMessage({
                 source: 'Formulário de orçamento',
