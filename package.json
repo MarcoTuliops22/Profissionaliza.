@@ -1,12 +1,4 @@
 {
-  "name": "ganhar-dinheiro",
-  "version": "1.0.0",
-  "description": "Site Estatico",
-  "main": "index.html",
-  "scripts": {
-    "build": "echo 'Sem etapa de build - site estatico'"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "version": 2,
+  "cleanUrls": true
 }
