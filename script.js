@@ -43,16 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#39;')
-            .replace(/`/g, '&#96;');  // evita template literal injection
+            .replace(/`/g, '&#96;');
     }
 
-    // Sanitização reforçada para conteúdo HTML do bot (evita DOM XSS)
     function sanitizeBotHtml(html) {
-        // Permite apenas tags seguras: <strong>, <br>, <em>
         return String(html)
-            .replace(/<(?!\/?(?:strong|br|em)\b)[^>]*>/gi, '') // remove tags não permitidas
-            .replace(/javascript:/gi, '')  // bloqueia javascript: URIs
-            .replace(/on\w+\s*=/gi, '');   // remove event handlers inline
+            .replace(/<(?!\/?(?:strong|br|em)\b)[^>]*>/gi, '')
+            .replace(/javascript:/gi, '')
+            .replace(/on\w+\s*=/gi, '');
     }
 
     function sanitizeText(str, maxLength) {
@@ -189,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalWhatsapp.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMessage)}`;
         modalWhatsapp.rel = 'noopener noreferrer';
 
-        paymentStatus.innerHTML = 'Aguardando pagamento... <span class="loader"></span>';
+        paymentStatus.textContent = 'Aguardando pagamento...';
         paymentStatus.classList.remove('success-message');
         btnSimulate.style.display = 'block';
         btnSimulate.innerText = 'Simular Pagamento Aprovado';
@@ -236,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSimulate.disabled = true;
 
         setTimeout(() => {
-            paymentStatus.innerHTML = '✅ Pagamento Aprovado! Agendando seu atendimento...';
+            paymentStatus.textContent = '✅ Pagamento Aprovado! Agendando seu atendimento...';
             paymentStatus.classList.add('success-message');
             btnSimulate.style.display = 'none';
 
@@ -465,11 +463,36 @@ document.addEventListener('DOMContentLoaded', () => {
         msgDiv.className = `chat-msg ${sender}-msg`;
 
         if (sender === 'user') {
-            // Usuário: sempre textContent (nunca innerHTML) — previne XSS
             msgDiv.textContent = sanitizeText(text, MAX_CHAT_LENGTH);
         } else {
-            // Bot: sanitiza o HTML permitindo apenas tags seguras
-            msgDiv.innerHTML = sanitizeBotHtml(text);
+            const safeText = sanitizeBotHtml(text);
+            const fragment = document.createDocumentFragment();
+            const parts = safeText.split(/(<br>|<strong>|<em>|<\/strong>|<\/em>)/gi);
+            const allowedTags = { br: document.createElement('br'), strong: document.createElement('strong'), em: document.createElement('em') };
+
+            parts.forEach(part => {
+                if (!part) return;
+                if (part === '<br>') {
+                    fragment.appendChild(document.createElement('br'));
+                } else if (part === '<strong>') {
+                    const node = document.createElement('strong');
+                    fragment.appendChild(node);
+                    node.dataset.tag = 'strong';
+                } else if (part === '</strong>') {
+                    return;
+                } else if (part === '<em>') {
+                    const node = document.createElement('em');
+                    fragment.appendChild(node);
+                    node.dataset.tag = 'em';
+                } else if (part === '</em>') {
+                    return;
+                } else {
+                    const textNode = document.createTextNode(part);
+                    fragment.appendChild(textNode);
+                }
+            });
+
+            msgDiv.appendChild(fragment);
         }
 
         chatBodyContent.appendChild(msgDiv);
@@ -479,7 +502,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function showTyping() {
         const typing = document.createElement('div');
         typing.className = 'chat-msg bot-msg typing-indicator';
-        typing.innerHTML = '<span></span><span></span><span></span>';
+        ['span', 'span', 'span'].forEach(() => {
+            const dot = document.createElement('span');
+            typing.appendChild(dot);
+        });
         chatBodyContent.appendChild(typing);
         chatBodyContent.scrollTop = chatBodyContent.scrollHeight;
         return typing;
@@ -705,7 +731,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Service card click -> scroll to form
     document.querySelectorAll('.service-card').forEach(card => {
         card.addEventListener('click', () => {
-            const serviceName = card.dataset.serviceName || card.querySelector('h4').innerText.trim();
+            const heading = card.querySelector('h4');
+            const serviceName = card.dataset.serviceName || (heading ? heading.textContent.trim() : '');
             const orderTypeSelect = document.getElementById('order-type');
 
             if (orderTypeSelect) {

@@ -8,5 +8,3 @@ Thumbs.db
 data/visitors.json
 data/guardian-report.json
 data/guardian-log.json
-node_modules/
-.env

@@ -11,6 +11,16 @@ const HTML_SNIPPET_MAX = 12000;
 
 let isRunning = false;
 
+function sanitizeTextValue(value, maxLength = 400) {
+    if (typeof value !== 'string') return '';
+    return value.trim().slice(0, maxLength).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+}
+
+function normalizeVisitorCount(value) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+}
+
 function readJson(filePath, fallback) {
     try {
         if (fs.existsSync(filePath)) {
@@ -243,8 +253,12 @@ Regras:
 }
 
 function applyPatchToHtml(html, patch) {
+    if (!patch || typeof patch !== 'object') {
+        throw new Error('Patch inválido.');
+    }
+
     if (patch.type === 'meta-description') {
-        const safe = patch.value.replace(/"/g, '&quot;');
+        const safe = sanitizeTextValue(patch.value, 300).replace(/"/g, '&quot;');
         if (/<meta\s+name=["']description["']/i.test(html)) {
             return html.replace(
                 /(<meta\s+name=["']description["']\s+content=["'])([^"']*)(["'])/i,
@@ -258,7 +272,7 @@ function applyPatchToHtml(html, patch) {
     }
 
     if (patch.type === 'title') {
-        const safe = patch.value.replace(/</g, '').replace(/>/g, '');
+        const safe = sanitizeTextValue(patch.value, 300).replace(/</g, '').replace(/>/g, '');
         if (/<title>[^<]*<\/title>/i.test(html)) {
             return html.replace(/<title>[^<]*<\/title>/i, `<title>${safe}</title>`);
         }
@@ -301,6 +315,9 @@ async function runAnalysis({ genAI, visitorCount = 0, reason = 'manual' }) {
     if (isRunning) {
         throw new Error('Análise já em andamento. Aguarde a conclusão.');
     }
+
+    const safeReason = sanitizeTextValue(reason, 120);
+    const safeVisitorCount = normalizeVisitorCount(visitorCount);
 
     isRunning = true;
     const startedAt = Date.now();
@@ -401,7 +418,7 @@ function scheduleGuardian({ genAI, getVisitorCount, intervalHours = 24 }) {
 
     const tick = async (reason) => {
         try {
-            const visitorCount = typeof getVisitorCount === 'function' ? getVisitorCount() : 0;
+            const visitorCount = typeof getVisitorCount === 'function' ? normalizeVisitorCount(getVisitorCount()) : 0;
             const report = await runAnalysis({ genAI, visitorCount, reason });
             const auto = await runAutoImprovements(report);
             if (auto.applied.length) {
