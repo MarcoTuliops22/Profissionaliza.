@@ -1,21 +1,12 @@
 {
   "name": "ganhar-dinheiro",
   "version": "1.0.0",
-  "description": "",
-  "main": "script.js",
+  "description": "Site Estatico",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "build": "echo 'Sem etapa de build - site estatico'"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.1",
-    "express": "^5.2.1",
-    "helmet": "^8.3.0"
-  }
+  "license": "ISC"
 }
